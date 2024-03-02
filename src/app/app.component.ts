@@ -10,6 +10,7 @@ export class AppComponent implements OnInit {
   genders = ['male', 'female'];
   signupForm: FormGroup;
   sayHi = 'Hi welcome';
+  filteredText: string;
 
   ngOnInit() {
     this.signupForm = new FormGroup({
@@ -37,5 +38,45 @@ export class AppComponent implements OnInit {
   }
   reset() {
     this.signupForm.reset();
+  }
+
+  // new
+  products = [
+    {
+      type: 'meduim',
+      name: 'Desktop Computer',
+      status: 'stable',
+      started: new Date(15, 1, 2017),
+    },
+    {
+      type: 'large',
+      name: 'Gaming Laptop',
+      status: 'stable',
+      started: new Date(15, 1, 2017),
+    },
+    {
+      type: 'small',
+      name: 'Ultrabook Multimedia',
+      status: 'offline',
+      started: new Date(15, 1, 2017),
+    },
+    {
+      type: 'small',
+      name: 'SSD Hard disk',
+      status: 'stable',
+      started: new Date(15, 1, 2017),
+    },
+  ];
+  getStatusClasses(server: {
+    type: string;
+    name: string;
+    status: string;
+    started: Date;
+  }) {
+    return {
+      'list-group-item-success': server.status === 'stable',
+      'list-group-item-warning': server.status === 'offline',
+      'list-group-item-danger': server.status === 'critical',
+    };
   }
 }

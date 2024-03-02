@@ -54,3 +54,24 @@
     </div>
   </div>
 </div>
+<div class="container">
+  <input type="text" [(ngModel)]="filteredText" />
+  <div class="row">
+    <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+      <ul class="list-group">
+        <li
+          class="list-group-item"
+          *ngFor="let product of products | filter : filteredText"
+          [ngClass]="getStatusClasses(product)"
+        >
+          <strong>{{ product.name | cutStr : 3 }}</strong> |
+          {{ product.type | uppercase | cutStr : 2 }} |
+          {{ product.started | date : "fullDate" | uppercase }}
+          <span class="badge badge-secondary">
+            {{ product.status }}
+          </span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
