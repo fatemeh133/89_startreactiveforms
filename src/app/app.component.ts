@@ -80,4 +80,12 @@ export class AppComponent implements OnInit {
       'list-group-item-danger': server.status === 'critical',
     };
   }
+  addProduct() {
+    this.products.push({
+      type: 'large',
+      name: 'Gaming Laptop',
+      status: 'offline',
+      started: new Date(15, 1, 2017),
+    });
+  }
 }
