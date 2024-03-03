@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
@@ -12,6 +13,32 @@ export class AppComponent implements OnInit {
   sayHi = 'Hi welcome';
   filteredText: string;
   filteredname: string;
+  promis = new Promise((resolve) => {
+    setTimeout(() => {
+      resolve('online');
+    }, 2000);
+  });
+  reponseArray: any[];
+  url = 'https://jsonplaceholder.typicode.com/posts';
+
+  constructor(private http: HttpClient) {
+    http.get<any[]>(this.url).subscribe({
+      next: (response) => {
+        console.log(response);
+        this.reponseArray = response;
+      },
+    });
+  }
+  post(titleInput: HTMLInputElement) {
+    const post: any = { title: titleInput.value };
+
+    this.http.post(this.url, JSON.stringify(post)).subscribe({
+      next: (res) => {
+        post.id = res;
+        this.reponseArray.splice(0, 0, post);
+      },
+    });
+  }
 
   ngOnInit() {
     this.signupForm = new FormGroup({

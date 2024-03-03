@@ -1,4 +1,6 @@
 <h3>{{ sayHi | uppercase | cutStr : 2 }}</h3>
+<h4>server is: {{ promis | async }}</h4>
+
 <div class="container">
   <div class="row">
     <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
@@ -81,3 +83,12 @@
     </div>
   </div>
 </div>
+<input
+  type="text"
+  placeholder="enter title..."
+  (keyup.enter)="post(titleInput)"
+  #titleInput
+/>
+<ul>
+  <li *ngFor="let item of reponseArray">{{ item.title }}</li>
+</ul>
