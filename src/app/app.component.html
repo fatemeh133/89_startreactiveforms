@@ -55,13 +55,18 @@
   </div>
 </div>
 <div class="container">
-  <input type="text" [(ngModel)]="filteredText" />
+  <input type="text" [(ngModel)]="filteredText" placeholder="status" />
+  <input type="text" [(ngModel)]="filteredname" placeholder="name" />
   <div class="row">
     <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
       <ul class="list-group">
         <li
           class="list-group-item"
-          *ngFor="let product of products | filter : filteredText"
+          *ngFor="
+            let product of products
+              | filter : filteredText : 'status'
+              | filter : filteredname : 'name'
+          "
           [ngClass]="getStatusClasses(product)"
         >
           <strong>{{ product.name | cutStr : 3 }}</strong> |

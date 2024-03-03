@@ -4,7 +4,9 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'filter',
 })
 export class FilterPipe implements PipeTransform {
-  transform(value: any, filteredText: string): any {
+  transform(value: any, ...filteredTexts: string[]): any {
+    const filteredText = filteredTexts[0];
+    const titleOfSearch = filteredTexts[1];
     if (
       value.length === 0 ||
       filteredText === undefined ||
@@ -14,10 +16,10 @@ export class FilterPipe implements PipeTransform {
     }
     const newfilteredArray = [];
     for (const item of value) {
-      if (item.status === filteredText) {
+      if (item[titleOfSearch].toLowerCase().startsWith(filteredText)) {
         newfilteredArray.push(item);
-        return newfilteredArray;
       }
     }
+    return newfilteredArray;
   }
 }

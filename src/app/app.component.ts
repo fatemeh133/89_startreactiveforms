@@ -11,6 +11,7 @@ export class AppComponent implements OnInit {
   signupForm: FormGroup;
   sayHi = 'Hi welcome';
   filteredText: string;
+  filteredname: string;
 
   ngOnInit() {
     this.signupForm = new FormGroup({
