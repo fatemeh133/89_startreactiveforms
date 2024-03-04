@@ -8,3 +8,10 @@
 input.ng-invalid.ng-touched {
   border: 1px solid red;
 }
+li {
+  border: 0.5px solid rgb(172, 172, 172);
+}
+ul {
+  list-style: none;
+  padding: 20px;
+}

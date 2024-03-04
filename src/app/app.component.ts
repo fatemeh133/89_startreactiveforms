@@ -26,6 +26,7 @@ export class AppComponent implements OnInit {
       next: (response) => {
         console.log(response);
         this.reponseArray = response;
+        console.log(this.reponseArray);
       },
     });
   }
@@ -33,13 +34,42 @@ export class AppComponent implements OnInit {
     const post: any = { title: titleInput.value };
 
     this.http.post(this.url, JSON.stringify(post)).subscribe({
-      next: (res) => {
-        post.id = res;
+      next: (res: any) => {
+        console.log(res.id);
+
+        post.id = res.id;
         this.reponseArray.splice(0, 0, post);
       },
     });
   }
+  updatePost(post: any) {
+    this.http
+      .patch(
+        this.url + '/' + post.id,
+        JSON.stringify({ title: 'Fateme Aghaahmadi' }),
+        {
+          headers: { 'Content-type': 'application/json; charset=UTF-8' },
+        }
+      )
+      .subscribe({
+        next: (res) => {
+          console.log(res);
 
+          const index = this.reponseArray.indexOf(post);
+          this.reponseArray.splice(index, 0, { title: 'Fateme Aghaahmadi' });
+        },
+      });
+  }
+  deletePost(post: any) {
+    this.http.delete(this.url + '/' + post.id).subscribe({
+      next: (res) => {
+        console.log(res);
+
+        const index = this.reponseArray.indexOf(post);
+        this.reponseArray.splice(index, 1);
+      },
+    });
+  }
   ngOnInit() {
     this.signupForm = new FormGroup({
       userData: new FormGroup({

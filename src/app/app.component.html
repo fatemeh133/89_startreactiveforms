@@ -90,5 +90,11 @@
   #titleInput
 />
 <ul>
-  <li *ngFor="let item of reponseArray">{{ item.title }}</li>
+  <li *ngFor="let item of reponseArray">
+    {{ item.title }}
+    <div>
+      <button class="btn btn-primary" (click)="updatePost(item)">Update</button>
+      <button class="btn btn-danger" (click)="deletePost(item)">Delete</button>
+    </div>
+  </li>
 </ul>
