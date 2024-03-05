@@ -1,6 +1,9 @@
+import { BadInputError } from './error/badInputError';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { HttpRequstService } from './services/http-requst.service';
+import { NotFound } from './error/not-found';
 
 @Component({
   selector: 'app-root',
@@ -19,58 +22,22 @@ export class AppComponent implements OnInit {
     }, 2000);
   });
   reponseArray: any[];
-  url = 'https://jsonplaceholder.typicode.com/posts';
 
-  constructor(private http: HttpClient) {
-    http.get<any[]>(this.url).subscribe({
+  constructor(private service: HttpRequstService) {}
+  ngOnInit() {
+    this.service.get().subscribe({
       next: (response) => {
         console.log(response);
         this.reponseArray = response;
         console.log(this.reponseArray);
       },
-    });
-  }
-  post(titleInput: HTMLInputElement) {
-    const post: any = { title: titleInput.value };
-
-    this.http.post(this.url, JSON.stringify(post)).subscribe({
-      next: (res: any) => {
-        console.log(res.id);
-
-        post.id = res.id;
-        this.reponseArray.splice(0, 0, post);
+      error: (error: any) => {
+        if (error instanceof BadInputError) {
+          alert('Not found');
+        } else throw error;
       },
     });
-  }
-  updatePost(post: any) {
-    this.http
-      .patch(
-        this.url + '/' + post.id,
-        JSON.stringify({ title: 'Fateme Aghaahmadi' }),
-        {
-          headers: { 'Content-type': 'application/json; charset=UTF-8' },
-        }
-      )
-      .subscribe({
-        next: (res) => {
-          console.log(res);
 
-          const index = this.reponseArray.indexOf(post);
-          this.reponseArray.splice(index, 0, { title: 'Fateme Aghaahmadi' });
-        },
-      });
-  }
-  deletePost(post: any) {
-    this.http.delete(this.url + '/' + post.id).subscribe({
-      next: (res) => {
-        console.log(res);
-
-        const index = this.reponseArray.indexOf(post);
-        this.reponseArray.splice(index, 1);
-      },
-    });
-  }
-  ngOnInit() {
     this.signupForm = new FormGroup({
       userData: new FormGroup({
         username: new FormControl(null),
@@ -83,6 +50,55 @@ export class AppComponent implements OnInit {
       userData: { username: 'example username' },
     });
   }
+
+  post(titleInput: HTMLInputElement) {
+    const post: any = { title: titleInput.value };
+
+    this.service.post(post).subscribe({
+      next: (res: any) => {
+        console.log(res.id);
+
+        post.id = res.id;
+        this.reponseArray.splice(0, 0, post);
+      },
+      error: (error: any) => {
+        if (error instanceof BadInputError) {
+          alert('400 Bad Request');
+        } else throw error;
+      },
+    });
+  }
+  updatePost(post: any) {
+    this.service.update(post).subscribe({
+      next: (res) => {
+        console.log(res);
+
+        const index = this.reponseArray.indexOf(post);
+        this.reponseArray.splice(index, 0, { title: 'Fateme Aghaahmadi' });
+      },
+      error: (error: any) => {
+        if (error instanceof NotFound) {
+          alert('Not found');
+        } else throw error;
+      },
+    });
+  }
+  deletePost(post: any) {
+    this.service.delete(post).subscribe({
+      next: (res) => {
+        console.log(res);
+
+        const index = this.reponseArray.indexOf(post);
+        this.reponseArray.splice(index, 1);
+      },
+      error: (error: any) => {
+        if (error instanceof NotFound) {
+          alert('Not found');
+        } else throw error;
+      },
+    });
+  }
+
   onSubmit() {
     console.log(this.signupForm);
   }
